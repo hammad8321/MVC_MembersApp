@@ -1,17 +1,41 @@
+using Microsoft.AspNetCore.Builder;
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddOpenApi();
 builder.Services.AddControllersWithViews();
+
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
+    app.MapScalarApiReference(options =>
+    {
+        options
+        .WithTitle("Demo Email")
+        .WithTheme(ScalarTheme.Mars)
+        .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.HttpClient);
+
+    });
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+
+    //app.UseSwagger();
+    //app.UseSwaggerUI(c =>
+    //{
+    //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo API V1");
+    //    c.RoutePrefix = "swagger"; // Default route, can be omitted
+    //});
+
+
 }
+
 
 app.UseHttpsRedirection();
 app.UseRouting();
@@ -27,3 +51,19 @@ app.MapControllerRoute(
 
 
 app.Run();
+
+
+
+/*
+ *      git remote set-url origin https://github.com/hammad8321/MVC_MembersApp.git
+ * 
+ * 
+ *  git remote remove origin
+     remote add origin https://github.com/hammad8321/MVC_MembersApp.git
+
+
+git push -f origin main
+ * 
+ * 
+ */
+
